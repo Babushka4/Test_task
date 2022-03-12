@@ -13,10 +13,10 @@ def main_window(request):
         if userform.is_valid():
 
             # data extracting
-            current_name = userform.cleaned_data['name']
-            current_fulling = userform.cleaned_data['liters']
-            current_comment = userform.cleaned_data['comment']
-            tank_id = userform.cleaned_data['tank_id']
+            current_name = userform.cleaned_data['Имя_заливающего']
+            current_fulling = userform.cleaned_data['Литры']
+            current_comment = userform.cleaned_data['Комментарий']
+            tank_id = userform.cleaned_data['Номер_цистерны']
 
             # save data
             fulling_sample = Fulling(milk_tank_id=tank_id, name=current_name,
