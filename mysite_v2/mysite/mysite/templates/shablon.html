@@ -1,16 +1,19 @@
-{% extends 'MainWindow.html' %}
+{% extends 'BootstrapForm.html' %}
+
+{% block header %}Учёт заливок молока{% endblock %}
 
 {% block title %}Учёт молока{% endblock %}
 
 {% block content %}
+
     {% if fulling_info %}
 
-        <table border="1", align="right", width="20%">
-            <caption>Сводка по заливкам</caption>
-            <tr><th>Имя</th><th>Залито</th><th>Коммент</th></tr>
+        <h2>Сводка по заливкам</h2>
+        <table class="table table-success table-striped">
+            <tr><th>Имя</th><th>Залито</th><th>Коммент</th><th>Дата заливки</th></tr>
 
             {% for fulling in fulling_info %}
-                <tr><td>{{fulling.name}}</td><td>{{fulling.liters}} л.</td><td>{{fulling.comment}}</td></tr>
+                <tr><td>{{fulling.name}}</td><td>{{fulling.liters}} л.</td><td>{{fulling.comment}}</td><td>{{fulling.date}}</td></tr>
             {% endfor %}
 
         </table>
@@ -20,19 +23,15 @@
     {% endif %}
 
     {% if milk_tank %}
-
-        <table border="1", width="20%">
-            <caption>Сводка по цистернам</caption>
-            <tr><th>№ цистерны</th><th>Заполненность</th></tr>
+        <h2>Сводка по цистернам</h2>
+        <table class="table table-success table-striped">
+            <tr><th>№ цистерны</th><th>Заполненность</th><th>Статус</th></tr>
 
             {% for tank in milk_tank %}
-                {% if tank.fullness == 300 %}
-                    <tr><td bgcolor="red">{{tank.id}}</td><td>{{tank.fullness}} л.</td></tr>
-                {% elif tank.fullness >= 250 %}
-                    <tr><td bgcolor="yellow">{{tank.id}}</td><td>{{tank.fullness}} л.</td></tr>
-                {% else %}
-                    <tr><td>{{tank.id}}</td><td>{{tank.fullness}} л.</td></tr>
-                {% endif %}
+
+                    <tr><td bgcolor="red">{{tank.id}}</td><td>{{tank.fullness}} л.</td>
+                        <td>{{tank.get_status}}</td></tr>
+
             {% endfor %}
 
         </table>
@@ -43,7 +42,12 @@
 
     {% if form %}
         <h1>Внесение данных по заливке</h1>
-        {{form}}
+        <form method="POST">
+                {% csrf_token %}
+                {{form}}
+                <input type="submit" value="Сохранить">
+        </form>
+
     {% else %}
         <tr><th><label for="id_tank">Номер цистерны:</label></th><td><input type="number" name="tank_id" required id="id_tank" /></td></tr>
         <tr><th><label for="id_name">Имя заливающего:</label></th><td><input type="text" name="name" required id="id_name" /></td></tr>
