@@ -37,7 +37,7 @@ class Fulling(models.Model):
         return self.name
 
     milk_tank = models.ForeignKey(MilkTank, on_delete=models.CASCADE)
-    name = models.CharField("Имя заливающего", max_length=30)
+    name = models.ForeignKey('Worker', on_delete=models.CASCADE)
     liters = models.IntegerField("Число залитых литров")
     comment = models.CharField("Комментарий к заливке", max_length=50)
     date = models.DateField("Время заливки", auto_now=True)
@@ -46,3 +46,18 @@ class Fulling(models.Model):
     class Meta:
         verbose_name = 'Заливка'
         verbose_name_plural = 'Заливки'
+
+
+class Worker(models.Model):
+
+    def __str__(self):
+        return self.name
+
+    name = models.CharField('Имя рабочего', max_length=50)
+    start_date = models.DateField('Дата приема на работу', auto_now=True)
+    salary = models.IntegerField('Оклад')
+    
+
+    class Meta:
+        verbose_name = 'Работник'
+        verbose_name_plural = 'Работники'

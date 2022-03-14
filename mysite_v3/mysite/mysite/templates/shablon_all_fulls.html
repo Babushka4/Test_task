@@ -1,0 +1,24 @@
+{% extends 'BootstrapForm.html' %}
+
+{% block header %}Все заливки{% endblock %}
+
+{% block title %}Все заливки{% endblock %}
+
+{% block content %}
+
+    {% if fulling_info %}
+
+        <h2>Сводка по заливкам</h2>
+        <table class="table table-success table-striped">
+            <tr><th>Имя</th><th>Залито</th><th>Коммент</th><th>Дата заливки</th></tr>
+
+            {% for fulling in fulling_info %}
+                <tr><td>{{fulling.name}}</td><td>{{fulling.liters}} л.</td><td>{{fulling.comment}}</td><td>{{fulling.date}}</td></tr>
+            {% endfor %}
+        </table>
+        <a href="{% url 'home' %}">Назад</a>
+    {% else %}
+        Error have no data
+    {% endif %}
+
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import MilkTank, Fulling
+from .models import MilkTank, Fulling, Worker
 from django.views.generic import TemplateView
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
@@ -19,8 +19,13 @@ def main_window(request):
             current_comment = userform.cleaned_data['Комментарий']
             tank_id = userform.cleaned_data['Номер_цистерны']
 
+            if Worker.objects.filter(name=current_name).exists():
+                current_worker = Worker.objects.filter(name=current_name)[0]
+            else:
+                return HttpResponse("Работника не существует")
+
             # save data
-            fulling_sample = Fulling(milk_tank_id=tank_id, name=current_name,
+            fulling_sample = Fulling(milk_tank_id=tank_id, name_id=current_worker.id,
                                     liters=current_fulling, comment=current_comment)
             current_tank = MilkTank.objects.filter(id=tank_id)[0]
 
@@ -55,3 +60,8 @@ def main_window(request):
         return render(request, 'shablon.html', {'milk_tank': tank_info,
                                                 'fulling_info': fulling_info,
                                                 'form': form})
+
+
+def show_all_fulls(request):
+    fulling_info = Fulling.objects.order_by('name')
+    return render(request, 'shablon_all_fulls.html', {'fulling_info': fulling_info})
